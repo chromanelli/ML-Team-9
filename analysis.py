@@ -12,6 +12,7 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import ListedColormap
 import csv
 import seaborn as sns
+from sklearn.metrics import classification_report
 
 '''
 This file aims to analyze the tweet data located in tweets.csv
@@ -99,9 +100,11 @@ if __name__ == "__main__":
             Y[i] = 0
     n_neighbors = 2
     for weights in ['distance', 'uniform']:
+        print(weights)
+        print('------------')
         var1 = 'sentiment'
         for var2 in vars:
-
+            print(var2)
             df = pd.read_csv('with_financials.csv', quoting=csv.QUOTE_NONNUMERIC)._get_numeric_data()
             var1_data = df[var1].to_numpy()
             var2_data = df[var2].to_numpy()
@@ -112,13 +115,16 @@ if __name__ == "__main__":
             X = st.transform(X)
             # make model and predict
             train_X, test_X, train_Y, test_Y = train_test_split(X, Y, random_state=425)
-            print('trainx: ', train_X)
-            print('trainy: ', train_Y)
+            #print('trainx: ', train_X)
+            #print('trainy: ', train_Y)
             model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights).fit(train_X, train_Y)
             # model = tree.DecisionTreeClassifier().fit(train_X, train_Y)
             y_pred = model.predict(test_X)
             print(accuracy_score(test_Y, y_pred))
+            predictions = model.predict(test_X)
 
+            print(classification_report(test_Y, predictions))
+            '''
             # Create color maps
             h = 0.02
             cmap_light = ListedColormap(["orange","cornflowerblue"])
@@ -158,3 +164,4 @@ if __name__ == "__main__":
             #         plt.scatter(var1_data[i], var2_data[i], c='cyan')
             #     else:
             #         plt.scatter(var1_data[i], var2_data[i], c='magenta')
+            '''
